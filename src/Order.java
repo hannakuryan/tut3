@@ -7,17 +7,38 @@ public class Order {
     private String orderTime;
     private String status;
 
-    public Order(int id, Customer customer, Product[] products, int[] quantities) {
+    public Order(int id, Customer customer, Product[] products, int[] quantities, String orderDate, String orderTime, String status) {
         this.id = id;
         this.customer = customer;
-        this.products = new Product[]{products[0]};
+        this.product = products;
         this.quantities = quantities;
         this.orderDate = orderDate;
         this.orderTime = orderTime;
         this.status = status;
     }
 
-    public int getId() {
+    public double calculateTotalValue() {
+        double total = 0;
+        for (int i = 0; i < product.length; i++) {
+            total = total + product[i].getPrice() * quantities[i];
+        }
+        return total;
+    }
+
+    public double applyDiscount() {
+        double total = calculateTotalValue();
+        if (customer.isLoyalCustomer()){
+            total *= 0.9;
+        }
+        return total;
+    }
+
+    public void displayDetails(){
+        System.out.println("Customer ID: " + customer.getId());
+        
+    }
+
+        public int getId() {
         return id;
     }
 
@@ -71,26 +92,6 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public double calculateTotalValue() {
-        double total = 0;
-        for (int i = 0; i < products.length; i++) {
-            total = total + products[i].getPrice() * quantities[i];
-        }
-        return total;
-    }
-
-    public double applyDiscount() {
-        double total = calculateTotalValue();
-        if (customer.isLoyalCustomer()){
-            total *= 0.9;
-        }
-        return total;
-    }
-
-    public void displayDetails(){
-        System.out.println("Customer ID: " + customer.getId());
     }
 
 }
